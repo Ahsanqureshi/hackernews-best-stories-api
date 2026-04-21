@@ -1,0 +1,34 @@
+using HackerNewsApi.Clients;
+using HackerNewsApi.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+/// register services
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IStoryService,StoryService>();
+builder.Services.AddHttpClient<IHackerNewsClient, HackerNewsClient>();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
